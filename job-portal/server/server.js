@@ -9,7 +9,7 @@ import {clerkWebhooks} from './controllers/webhooks.js'
 // initialize express
 const app = express()
 // connect to mongodb
-await connectDB()
+//await connectDB()
 
 // middlewares
 app.use(cors())
@@ -30,6 +30,20 @@ const PORT = process.env.PORT || 5000
 Sentry.setupExpressErrorHandler(app);
 
 
-app.listen(PORT ,()=>{
-    console.log(`Server is running on port ${PORT}`);
-})
+// app.listen(PORT ,()=>{
+//     console.log(`Server is running on port ${PORT}`);
+// })
+
+const startServer = async () => {
+  try {
+    await connectDB()
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`)
+    })
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error)
+  }
+}
+
+
+startServer()
