@@ -1,6 +1,7 @@
 const Quiz = require("../models/Quiz");
 const Question = require("../models/Question");
 const Attempt = require("../models/Attempt");
+const User = require("../models/User");
 
 // ✅
 exports.createQuiz = async (req, res) => {
@@ -159,7 +160,6 @@ exports.attemptQuiz = async (req, res) => {
     let score = 0;
     const answersArray = [];
 
-
     for (const question of questions) {
       const userAnswer = answers.find(
         (ans) => ans.questionId === question._id.toString()
@@ -183,6 +183,16 @@ exports.attemptQuiz = async (req, res) => {
       answers: answersArray,
     });
     await attempt.save();
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          attemptedQuizes: attempt._id,
+        },
+      },
+      { new: true }
+    );
 
     return res.status(200).json({
       success: true,

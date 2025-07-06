@@ -10,7 +10,12 @@ import CreateQuestions from "./pages/CreateQuestions"
 import AdminQuizes from "./pages/AdminQuizes"
 import AttemptQuiz from "./pages/AttemptQuiz"
 import QuizResult from "./pages/QuizResult"
+import { useSelector } from "react-redux"
+
 function App() {
+
+  const { user } = useSelector(state => state.auth)
+  console.log("user : ", user);
 
   return (
     <div className=" bg-slate-950 text-white">

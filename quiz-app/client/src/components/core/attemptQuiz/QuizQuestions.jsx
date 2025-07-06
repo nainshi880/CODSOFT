@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Button from '../../Button';
 import QuestionCard from './QuestionCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { apiConnector } from '../../../services/apiConnector';
 import { quizEndpoints } from "../../../services/APIs";
+import { setUser } from "../../../slices/AuthSlice";
 
 const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     const [quizStarted, setQuizStarted] = useState(false);
     const [remainingTime, setRemainingTime] = useState(null);
     const [userAnswers, setUserAnswers] = useState([]);
-    const { token } = useSelector(state => state.auth);
+    const { token, user } = useSelector(state => state.auth);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (quizDetails?.timer) {
@@ -23,9 +25,10 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
         let timer;
         if (quizStarted && remainingTime > 0) {
             timer = setInterval(() => {
-                setRemainingTime((prevTime) => prevTime - 1);
+                setRemainingTime(prevTime => prevTime - 1);
             }, 1000);
         } else if (quizStarted && remainingTime === 0) {
+            clearInterval(timer);
             alert('Time is up!');
             submitQuiz();
         }
@@ -33,7 +36,7 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     }, [quizStarted, remainingTime]);
 
     const handleAnswerChange = useCallback((questionId, selectedOption) => {
-        setUserAnswers((prevAnswers) => {
+        setUserAnswers(prevAnswers => {
             const existingAnswerIndex = prevAnswers.findIndex(
                 (answer) => answer.questionId === questionId
             );
@@ -51,22 +54,19 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     };
 
     const submitQuiz = async () => {
-
-        console.log("quizQuestions : ", quizQuestions)
-
         try {
             const response = await apiConnector(
                 'POST',
                 `${quizEndpoints.ATTEMMP_QUIZ}/${quizDetails._id}/attempt`,
                 {
                     quizId: quizDetails._id,
-                    answers: userAnswers
+                    answers: userAnswers,
                 },
                 {
                     Authorization: `Bearer ${token}`,
                 }
             );
-            console.log('Quiz submission response:', response);
+            dispatch(setUser({ ...user, attemptedQuizzes: [...(user.attemptedQuizzes || []), quizDetails._id] })); // Ensure the array exists
             navigate('/quiz-results', { state: { score: response.data.score, total: quizQuestions?.length } });
         } catch (error) {
             console.error('Error submitting quiz:', error);

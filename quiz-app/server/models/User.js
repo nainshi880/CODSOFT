@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "user"],
       required: true,
     },
+    attemptedQuizes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Quiz",
+      },
+    ],
   },
   { timestamps: true }
 );
