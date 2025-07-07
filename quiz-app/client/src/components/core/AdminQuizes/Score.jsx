@@ -28,18 +28,27 @@ const Score = ({ quiz }) => {
     }, [])
 
     return (
-        <div>
+        <div className='bg-slate-900 z-[2] w-full rounded-lg py-5 flex flex-col gap-1 text-xl'>
             {
                 loading ? (
-                    <div>Loading...</div>
+                    <div className='text-center'>Loading...</div>
                 ) : !loading && scores.length > 0 ? (
-                    scores.map((score, index) => (
-                        <div key={index}>
-                            <p>{score.user.name} - {score.score}</p>
+                    <div className=''>
+                        <div className='flex justify-between p-3'>
+                            <p className='text-green-600'>Name</p>
+                            <p className='text-green-600'>Score</p>
                         </div>
-                    ))
+                        {
+                            scores.map((score, index) => (
+                                <div className='flex justify-between py-2 border-t border-slate-600 px-3' key={index}>
+                                    <p> {score?.userId?.username}</p>
+                                    <p> <span className='text-green-500'>{score?.score}</span> / {score.answers.length}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
                 ) : (
-                    <p>No scores found</p>
+                    <p className='text-center'>No scores found</p>
                 )
             }
         </div>

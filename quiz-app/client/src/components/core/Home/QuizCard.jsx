@@ -21,7 +21,7 @@ const QuizCard = ({ quiz }) => {
             <span className='absolute top-[5%] right-[-5%] rotate-[30deg]'>
                 {
                     user.attemptedQuizzes?.includes(quiz._id) && (
-                        <span className='bg-green-600 text-white px-2 py-1 rounded-lg text-sm'>Completed</span>
+                        <span className='bg-green-600 text-white px-2 py-1 text-sm'>Completed</span>
                     )
                 }
             </span>

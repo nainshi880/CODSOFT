@@ -20,7 +20,7 @@ const QuizCard = ({ quiz, handleDeleteQuiz }) => {
 
     return (
         <>
-            <div className='py-3 px-5 border border-slate-600 bg-slate-900 hover:border-slate-400 transition-all duration-300 rounded-lg'>
+            <div className='py-3 px-5 border border-slate-600 bg-slate-900 hover:border-slate-400 transition-all duration-300 rounded-lg relative'>
                 <span onClick={() => setShowDetails(!showDetails)} className='border-b cursor-pointer pb-3 mb-2 flex justify-between items-center border-slate-600'>
                     <h3 className='text-xl font-semibold '>title : {quiz.title}</h3>
                     <p className={`${!showDetails ? "rotate-180" : "rotate-0"} transition-all duration-300`}><IoIosArrowUp /></p>

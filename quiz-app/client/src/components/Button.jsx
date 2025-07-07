@@ -12,7 +12,7 @@ const Button = ({
         <button
         onClick={onClick}
             disabled={disabled}
-            className={`w-full ${active ? " bg-green-700 hover:bg-green-800 focus:bg-green-800" : " bg-red-700 hover:bg-red-800 focus:bg-red-800"} transiiton-all duration-300 py-2  px-3 rounded-lg text-sm ${className}`}
+            className={`w-full ${active ? " bg-green-700 hover:bg-green-800 focus:bg-green-800" : " bg-red-700 hover:bg-red-800 focus:bg-red-800"} transiiton-all duration-300 py-1 md:py-2 px-3 rounded-lg text-sm ${className}`}
             type={type}>{children}</button>
 
     )

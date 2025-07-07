@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 const LoggedInRoutes = ({ children }) => {
 
     const navigate = useNavigate();
-    const { token } = useSelector(state => state.auth)
+    const { token, user } = useSelector(state => state.auth)
 
     useEffect(() => {
-        if (!token) {
-            console.log("here")
+        if (!token || !user) {
             navigate('/login')
             return
         }

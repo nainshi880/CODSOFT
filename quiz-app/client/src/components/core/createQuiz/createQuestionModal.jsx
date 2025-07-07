@@ -11,15 +11,21 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
   const [options, setOptions] = useState([]);
   const [currentOption, setCurrentOption] = useState('');
   const [isCurrentOptionCorrect, setIsCurrentOptionCorrect] = useState(false);
+  const [optionError, setOptionError] = useState('');
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { token } = useSelector(state => state.auth);
 
   const submitHandler = async (data) => {
+    if (!options.some(option => option.isCorrect)) {
+      setOptionError("There must be at least one correct option.");
+      return;
+    }
+
     data.options = options;
     data.quizId = quiz._id;
 
     try {
-      const response = await createQuestion(data, token)
+      const response = await createQuestion(data, token);
 
       if (response) {
         setQuestions(prevQuestions => [...prevQuestions, response]);
@@ -27,10 +33,9 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
       }
 
     } catch (e) {
-      console.log("ERROR WHILE CREATING THE QUESTION : ", e);
-      toast.error("question cannot be created")
+      console.log("ERROR WHILE CREATING THE QUESTION:", e);
+      toast.error("Question cannot be created");
     }
-
   };
 
   const addOption = () => {
@@ -39,6 +44,9 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
       return;
     }
     setOptions([...options, { text: currentOption, isCorrect: isCurrentOptionCorrect }]);
+    if(isCurrentOptionCorrect) {
+      setOptionError("");
+    }
     setCurrentOption('');
     setIsCurrentOptionCorrect(false);
   };
@@ -48,7 +56,7 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
   };
 
   return (
-    <div className='absolute top-[50%] w-[480px] max-w-[480px] mx-auto translate-y-[-50%] flex justify-start p-5 gap-10 flex-col items-center bg-slate-800 shadow-lg shadow-blue-300 rounded-lg border border-slate-600 inset-0 h-max'>
+    <div className='absolute top-[50%] max-w-[480px] mx-auto translate-y-[-50%] flex justify-start p-5 gap-10 flex-col items-center bg-slate-800 shadow-lg shadow-blue-300 rounded-lg border border-slate-600 inset-0 h-max'>
 
       <h3 className='text-3xl'>Create a question</h3>
 
@@ -77,7 +85,7 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
               value={currentOption}
               onChange={(e) => setCurrentOption(e.target.value)}
             />
-            <span className='flex items-center gap-2 self-start  justify-between w-full'>
+            <span className='flex items-center gap-2 self-start justify-between w-full'>
               <span className='space-x-2'>
                 <input
                   type="checkbox"
@@ -88,22 +96,22 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
                 />
                 <label htmlFor="isCorrect">Correct option?</label>
               </span>
-              <button onClick={addOption} className='p-2 text-lg flex items-center' type='button'><IoAdd /> Add</button>
+              <button onClick={addOption} className='p-2 text-lg flex gap-1 items-center' type='button'><IoAdd /> Add</button>
             </span>
           </span>
         </span>
 
         <span className='flex flex-col gap-1'>
-          {
-            options.map((option, index) => (
-              <div key={index} className='flex gap-2 items-center'>
-                <p>{option.text}</p>
-                {option.isCorrect && <span className='text-green-500'>(Correct)</span>}
-                <button type='button' onClick={() => removeOption(index)} className='text-red-500'><IoClose /></button>
-              </div>
-            ))
-          }
+          {options.map((option, index) => (
+            <div key={index} className='flex gap-2 items-center'>
+              <p>{option.text}</p>
+              {option.isCorrect && <span className='text-green-500'>(Correct)</span>}
+              <button type='button' onClick={() => removeOption(index)} className='text-red-500'><IoClose /></button>
+            </div>
+          ))}
         </span>
+
+        {optionError && <p className='text-red-500'>{optionError}</p>}
 
         <span className='flex justify-end w-full gap-3'>
           <Button onClick={() => setCreateQuestionModalData(null)} className='w-max h-max' active={false}>Cancel</Button>
@@ -113,6 +121,6 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
       </form>
     </div>
   );
-}
+};
 
 export default CreateQuestionModal;

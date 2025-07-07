@@ -7,10 +7,6 @@ exports.register = async (req, res) => {
   try {
     const { email, username, password, confirmPassword, role } = req.body;
 
-    // console.log("email : ", email);
-    // console.log("username : ", username);
-    // console.log("role : ", role);
-
     if (!username || !email || !password || !confirmPassword || !role) {
       return res
         .status(400)

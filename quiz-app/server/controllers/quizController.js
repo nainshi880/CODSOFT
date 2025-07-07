@@ -252,13 +252,13 @@ exports.getAdminQuizes = async (req, res) => {
   }
 };
 
-// ⚙️
+// ✅
 exports.getQuizAttempts = async (req, res) => {
   try {
     const quizId = req.params.id;
     const attempts = await Attempt.find({ quizId }).populate(
       "userId score",
-      "name"
+      "username"
     );
     return res.status(200).json({
       success: true,

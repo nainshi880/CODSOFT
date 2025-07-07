@@ -3,12 +3,10 @@ import Button from '../../Button';
 
 const QuestionCard = ({ question, deleteQuestionHandler }) => {
 
-  console.log("question : ", question);
-
   return (
     <div>
-      <div className='space-y-3 border-b border-slate-600 pb-5'>
-        <span className='flex justify-between gap-5'>
+      <div className='space-y-3 border-slate-600 pb-5'>
+        <span className='flex justify-between gap-5 border-b pb-3 border-slate-600'>
           <h4 className='text-xl font-semibold'>{question.questionText}</h4>
           <Button
             onClick={() => deleteQuestionHandler(question)}

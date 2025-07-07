@@ -1,0 +1,137 @@
+import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom';
+import { apiConnector } from '../services/apiConnector';
+import { questionEndpoints } from '../services/APIs';
+import Button from '../components/Button';
+import CreateQuestionModal from '../components/core/createQuiz/createQuestionModal';
+import QuestionCard from "../components/core/createQuiz/QuestionCard"
+import { deleteQuestion } from '../services/operations/questionAPIs';
+import { setQuiz, setEdit } from '../slices/QuizSlice';
+
+const CreateQuestions = () => {
+
+    const { quiz, edit } = useSelector(state => state.quiz);
+    const { token } = useSelector(state => state.auth);
+
+    const [questions, setQuestions] = useState([]);
+    const [createQuestionModalData, setCreateQuestionModalData] = useState(null);
+    const [laoding, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { id } = useParams();
+
+    const finishHandler = () => {
+        navigate("/dashboard/create-quiz")
+        dispatch(setQuiz(null))
+        dispatch(setEdit(false))
+    }
+
+    const deleteQuestionHandler = async (question) => {
+
+        console.log("deleting this question : ", question)
+
+        try {
+            const response = await deleteQuestion(question._id, token)
+            if (response) {
+                setQuestions(prevQuestions => prevQuestions.filter(q => q._id !== question._id))
+            }
+        } catch (e) {
+            console.log("ERRO DELETING QUESTION : ", e);
+        }
+    }
+
+    console.log("create question modal : ", createQuestionModalData)
+
+    const fetchQuestions = async () => {
+        setLoading(true)
+        try {
+            const response = await apiConnector("GET", `${questionEndpoints.GET_QUIZ_QUESTIONS}/${id}`, null, {
+                Authorization: `Bearer ${token}`
+            })
+            console.log("response : ", response)
+            if (response) {
+                setQuestions(response?.data?.data);
+            }
+        } catch (error) {
+            console.log(error);
+            console.log("ERROR FETCHING QUIZ QUESTIONS : ", e);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (quiz === null) {
+            navigate("/dashboard/create-quiz")
+        }
+    }, [])
+
+    useEffect(() => {
+        if (edit) {
+            fetchQuestions();
+        }
+    }, [quiz, edit, id]);
+
+    return (
+        <div className=' relative flex justify-start flex-col items-center gap-10'>
+            <div>
+                <h3 className='text-3xl underline text-center '>Create Questions</h3>
+            </div>
+
+            <section className='flex gap-y-3 w-full flex-col md:flex-row justify-between items-center'>
+                <div className='flex flex-col items-center md:items-start'>
+                    <span className='flex gap-5  items-center'>
+                        <h2 className='text-2xl text-center'>
+                            {quiz?.title}
+                        </h2>
+                        |
+                        <p>{quiz?.timer} minutes</p>
+                    </span>
+                    <p>{quiz?.description}</p>
+                </div>
+                <Button
+                    onClick={() => setCreateQuestionModalData({ ...quiz })}
+                    className='w-max h-max'
+                    active
+                >Create Question</Button>
+            </section>
+            <div className='border border-slate-600 p-5 w-full flex flex-col gap-5 rounded-lg'>
+                {
+                    !laoding && questions.length === 0 && (
+                        <p className='text-center text-lg'>No questions found</p>
+                    )
+                }
+                {
+                    !laoding && questions.length > 0 && (
+                        questions.map((ques) => (
+                            <QuestionCard
+                                deleteQuestionHandler={deleteQuestionHandler}
+                                key={ques?._id}
+                                question={ques}
+                                quiz={quiz}
+                                setCreateQuestionModalData={setCreateQuestionModalData}
+                                setQuestions={setQuestions}
+                            />
+                        ))
+                    )
+                }
+            </div>
+            <div className='self-end' onClick={finishHandler}>
+                <Button active>Finish</Button>
+            </div>
+            {
+                createQuestionModalData && (
+                    <CreateQuestionModal
+                        quiz={createQuestionModalData}
+                        setCreateQuestionModalData={setCreateQuestionModalData}
+                        setQuestions={setQuestions}
+                    />
+                )
+            }
+        </div>
+    )
+}
+
+export default CreateQuestions
