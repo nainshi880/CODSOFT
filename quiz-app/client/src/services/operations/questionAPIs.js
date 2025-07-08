@@ -3,7 +3,6 @@ import { apiConnector } from "../apiConnector"
 import toast from "react-hot-toast";
 
 export const createQuestion = async (data, token) => {
-  console.log("Data : ", data);
 
   try {
     const response = await apiConnector(

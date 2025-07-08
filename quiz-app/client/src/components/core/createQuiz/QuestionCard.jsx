@@ -5,7 +5,7 @@ const QuestionCard = ({ question, deleteQuestionHandler }) => {
 
   return (
     <div>
-      <div className='space-y-3 border-slate-600 pb-5'>
+      <div className='space-y-3 border border-slate-600 bg-slate-900 p-5 rounded-lg'>
         <span className='flex justify-between gap-5 border-b pb-3 border-slate-600'>
           <h4 className='text-xl font-semibold'>{question.questionText}</h4>
           <Button

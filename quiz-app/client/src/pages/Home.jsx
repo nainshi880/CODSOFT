@@ -21,7 +21,7 @@ const Home = () => {
         throw new Error(response.data.message)
       }
 
-      console.log("res : ", response);
+      // console.log("res : ", response);
 
       setQuizzes(response.data.data);
 
@@ -37,11 +37,11 @@ const Home = () => {
   }, [])
 
   return (
-    <section className='min-h-screen border-t border-slate-600 py-5'>
+    <section className='min-h-screen border-t border-slate-600 py-5 mt-3'>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3'>
         {
           loading
-            ? <h1>Loading...</h1>
+            ? <div className='text-center min-h-[90vh] flex items-center justify-center text-xl'>Loading...</div>
             : !loading && quizzes?.length > 0
               ? quizzes.map((quiz, index) => (
                 <QuizCard key={quiz._id} quiz={quiz} index={index} />

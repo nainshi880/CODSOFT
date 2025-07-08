@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { apiConnector } from '../services/apiConnector';
 import { questionEndpoints } from '../services/APIs';
 import Button from '../components/Button';
-import CreateQuestionModal from '../components/core/createQuiz/createQuestionModal';
+import CreateQuestionModal from '../components/core/createQuiz/CreateQuestionModal';
 import QuestionCard from "../components/core/createQuiz/QuestionCard"
 import { deleteQuestion } from '../services/operations/questionAPIs';
 import { setQuiz, setEdit } from '../slices/QuizSlice';
@@ -30,8 +30,6 @@ const CreateQuestions = () => {
 
     const deleteQuestionHandler = async (question) => {
 
-        console.log("deleting this question : ", question)
-
         try {
             const response = await deleteQuestion(question._id, token)
             if (response) {
@@ -42,21 +40,18 @@ const CreateQuestions = () => {
         }
     }
 
-    console.log("create question modal : ", createQuestionModalData)
-
     const fetchQuestions = async () => {
         setLoading(true)
         try {
             const response = await apiConnector("GET", `${questionEndpoints.GET_QUIZ_QUESTIONS}/${id}`, null, {
                 Authorization: `Bearer ${token}`
             })
-            console.log("response : ", response)
+            // console.log("response : ", response)
             if (response) {
                 setQuestions(response?.data?.data);
             }
         } catch (error) {
-            console.log(error);
-            console.log("ERROR FETCHING QUIZ QUESTIONS : ", e);
+            console.log("ERROR FETCHING QUIZ QUESTIONS : ", error);
         } finally {
             setLoading(false)
         }
@@ -75,7 +70,7 @@ const CreateQuestions = () => {
     }, [quiz, edit, id]);
 
     return (
-        <div className=' relative flex justify-start flex-col items-center gap-10'>
+        <div className=' relative flex justify-start flex-col items-center gap-5 pb-5'>
             <div>
                 <h3 className='text-3xl underline text-center '>Create Questions</h3>
             </div>
@@ -97,7 +92,7 @@ const CreateQuestions = () => {
                     active
                 >Create Question</Button>
             </section>
-            <div className='border border-slate-600 p-5 w-full flex flex-col gap-5 rounded-lg'>
+            <div className=' w-full flex flex-col gap-5 rounded-lg'>
                 {
                     !laoding && questions.length === 0 && (
                         <p className='text-center text-lg'>No questions found</p>
@@ -118,7 +113,7 @@ const CreateQuestions = () => {
                     )
                 }
             </div>
-            <div className='self-end' onClick={finishHandler}>
+            <div className='self-end w-full md:w-max' onClick={finishHandler}>
                 <Button active>Finish</Button>
             </div>
             {

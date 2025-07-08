@@ -3,12 +3,18 @@ import { useForm } from 'react-hook-form';
 import Button from '../../Button';
 import { IoAdd, IoClose } from "react-icons/io5";
 import { apiConnector } from '../../../services/apiConnector';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Button from '../../Button';
+import { IoAdd, IoClose } from "react-icons/io5";
+import { apiConnector } from '../../../services/apiConnector';
 import { createQuestion } from '../../../services/operations/questionAPIs';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 
 const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData }) => {
   const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentOption, setCurrentOption] = useState('');
   const [isCurrentOptionCorrect, setIsCurrentOptionCorrect] = useState(false);
   const [optionError, setOptionError] = useState('');
@@ -20,7 +26,7 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
       setOptionError("There must be at least one correct option.");
       return;
     }
-
+    setLoading(true)
     data.options = options;
     data.quizId = quiz._id;
 
@@ -35,6 +41,8 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
     } catch (e) {
       console.log("ERROR WHILE CREATING THE QUESTION:", e);
       toast.error("Question cannot be created");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -44,7 +52,7 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
       return;
     }
     setOptions([...options, { text: currentOption, isCorrect: isCurrentOptionCorrect }]);
-    if(isCurrentOptionCorrect) {
+    if (isCurrentOptionCorrect) {
       setOptionError("");
     }
     setCurrentOption('');
@@ -56,7 +64,7 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
   };
 
   return (
-    <div className='absolute top-[50%] max-w-[480px] mx-auto translate-y-[-50%] flex justify-start p-5 gap-10 flex-col items-center bg-slate-800 shadow-lg shadow-blue-300 rounded-lg border border-slate-600 inset-0 h-max'>
+    <div className='absolute top-[50%] max-w-[480px] mx-auto translate-y-[-50%] flex justify-start p-5 gap-10 flex-col items-center bg-slate-800 shadow-lg shadow-slate-600 rounded-lg border border-slate-600 inset-0 h-max'>
 
       <h3 className='text-3xl'>Create a question</h3>
 
@@ -115,9 +123,9 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
 
         <span className='flex justify-end w-full gap-3'>
           <Button onClick={() => setCreateQuestionModalData(null)} className='w-max h-max' active={false}>Cancel</Button>
-          <Button type="submit" className='w-max h-max' active>Create</Button>
+          <Button type="submit" disabled={loading} className='w-max h-max' active>Create</Button>
         </span>
-        
+
       </form>
     </div>
   );

@@ -1,10 +1,17 @@
+import { useEffect, useState } from 'react';
 import React from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from "react-router-dom"
 import { useSelector } from 'react-redux';
 
 const QuizCard = ({ quiz }) => {
-    const { user } = useSelector(state => state.auth)
+
+    const [attempted, setAttempted] = useState(false)
+    const { user } = useSelector(state => state.auth);
+
+    useEffect(() => {
+        setAttempted(user?.attemptedQuizzes?.includes(quiz._id) ? true : false)
+    }, [user])
 
     return (
         <Link to={`/quiz/${quiz._id}`} className='border border-slate-600 bg-slate-900 p-3 rounded-lg relative'>
@@ -20,7 +27,7 @@ const QuizCard = ({ quiz }) => {
 
             <span className='absolute top-[5%] right-[-5%] rotate-[30deg]'>
                 {
-                    user.attemptedQuizzes?.includes(quiz._id) && (
+                    attempted && (
                         <span className='bg-green-600 text-white px-2 py-1 text-sm'>Completed</span>
                     )
                 }

@@ -20,7 +20,6 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const submitHandler = async (data) => {
-    console.log("data : ", data)
     setLoading(true);
     try {
       const response = await signUp(data)

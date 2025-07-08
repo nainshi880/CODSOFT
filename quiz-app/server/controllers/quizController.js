@@ -68,7 +68,7 @@ exports.updateQuiz = async (req, res) => {
   }
 };
 
-// ⚙️
+// ✅
 exports.deleteQuiz = async (req, res) => {
   try {
     const quizId = req.params.id;
@@ -188,7 +188,7 @@ exports.attemptQuiz = async (req, res) => {
       userId,
       {
         $push: {
-          attemptedQuizes: attempt._id,
+          attemptedQuizes: quizId
         },
       },
       { new: true }
@@ -211,9 +211,8 @@ exports.attemptQuiz = async (req, res) => {
 // ⚙️
 exports.getUserAttempts = async (req, res) => {
   try {
-    const userId = req.user._id; // Assuming req.user is set by the auth middleware
+    const userId = req.user._id; 
 
-    // Fetch all attempts by the user
     const attempts = await Attempt.find({ userId }).populate(
       "quizId",
       "title description"

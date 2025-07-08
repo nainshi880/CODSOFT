@@ -11,11 +11,11 @@ import AdminQuizes from "./pages/AdminQuizes"
 import AttemptQuiz from "./pages/AttemptQuiz"
 import QuizResult from "./pages/QuizResult"
 import { useSelector } from "react-redux"
+import History from "./pages/History"
 
 function App() {
 
   const { user } = useSelector(state => state.auth)
-  console.log("user : ", user);
 
   return (
     <div className=" bg-slate-950 text-white">
@@ -28,6 +28,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/dashboard">
             <Route index element={<LoggedInRoutes><DashboardLayout><Profile /></DashboardLayout></LoggedInRoutes>} />
+            <Route path="history" element={<LoggedInRoutes><DashboardLayout><History /></DashboardLayout ></LoggedInRoutes>} />
             <Route path="create-quiz" element={<LoggedInRoutes><DashboardLayout><CreateQuiz /></DashboardLayout ></LoggedInRoutes>} />
             <Route path="create-quiz/:id" element={<LoggedInRoutes><DashboardLayout><CreateQuestions /></DashboardLayout ></LoggedInRoutes>} />
             <Route path="quizes" element={<LoggedInRoutes><DashboardLayout><AdminQuizes /></DashboardLayout></LoggedInRoutes>} />

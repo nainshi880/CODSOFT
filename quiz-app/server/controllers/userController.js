@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email });
-    console.log("existing user : ", existingUser);
+    
     if (existingUser) {
       return res
         .status(400)
@@ -96,6 +96,7 @@ exports.login = async (req, res) => {
           username: user.username,
           role: user.role,
           createdAt: user.createdAt,
+          attemptedQuizzes: user?.attemptedQuizes || [],
         },
       },
     });

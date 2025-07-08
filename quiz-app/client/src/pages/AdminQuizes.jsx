@@ -41,8 +41,6 @@ const AdminQuizes = () => {
         }
     }
 
-    console.log("quizes : ", quizes);
-
     useEffect(() => {
         fetchAdminQuizes();
     }, [])
@@ -52,16 +50,17 @@ const AdminQuizes = () => {
             <div className='flex flex-col gap-3'>
                 {
                     loading ? (
-                        <p>Loading...</p>
+                        <div className='flex justify-center items-center min-h-[90vh]'>Loading...</div>
                     ) :
                         !loading && quizes.length > 0 ? (
                             quizes.map((quiz, index) => (
                                 <QuizCard handleDeleteQuiz={handleDeleteQuiz} key={quiz._id} quiz={quiz} index={index} />
                             ))
                         ) : (
-                            <p>No quizes found</p>
+                            <div className='flex justify-center items-center min-h-[90vh]'>No quizes found</div>
                         )
-                }
+                    }
+                    
             </div>
         </section>
     )
