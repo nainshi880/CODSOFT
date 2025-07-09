@@ -13,7 +13,8 @@ export const quizEndpoints = {
   GET_SCORES: `${BASE_URL}/attempts`,
   GET_ALL_QUIZES: `${BASE_URL}/quizzes`,
   GET_QUIZ_DETAILS: `${BASE_URL}/quizzes`,
-  ATTEMMP_QUIZ: `${BASE_URL}/quizzes`
+  ATTEMMP_QUIZ: `${BASE_URL}/quizzes`,
+   GET_USER_ATTEMPS: `${BASE_URL}/attempts`,
 };
 
 export const questionEndpoints = {

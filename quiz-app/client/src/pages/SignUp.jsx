@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -21,6 +22,7 @@ const SignUp = () => {
 
   const submitHandler = async (data) => {
     setLoading(true);
+    const toastId = toast.loading("Loading...")
     try {
       const response = await signUp(data)
       if (response) {
@@ -30,6 +32,7 @@ const SignUp = () => {
       console.log("ERROR WHILE SINGING UP : ", e);
     } finally {
       setLoading(false)
+      toast.dismiss(toastId)
     }
   }
 
@@ -40,7 +43,7 @@ const SignUp = () => {
   return (
     <div className='min-h-screen flex items-center justify-center'>
       <section>
-        <h1 className='text-center pb-3 text-4xl font-mono underline'>Quizzy </h1>
+        <h1 className='text-center pb-5 text-4xl font-mono underline'>Quizzy </h1>
         <form
           onSubmit={handleSubmit(submitHandler)}
           className='flex flex-col gap-y-3 max-w-[480px] shadow-lg shadow-blue-300 border p-10 rounded-lg'
@@ -50,11 +53,19 @@ const SignUp = () => {
               Create Your <HighLightText>Free </HighLightText>Account Now!!!
             </h3>
           </div>
+
+          {
+            loading &&
+            <span className='text-center text-red-500 text-sm'>
+              When loaded for the first time, the server might take a minute or two to respond. Please be patient!
+            </span>
+          }
+
           <span className='flex flex-col gap-1'>
             <label htmlFor="username">Create a Username</label>
             <input
               id='username'
-              placeholder='Enter your username'
+              placeholder='Username'
               className='py-1 text-base placeholder:text-black text-slate-950 rounded-lg px-3 outline-none bg-slate-300 xl:text-xl'
               type="text"
               {...register("username", { required: "Username is required" })}
@@ -68,7 +79,7 @@ const SignUp = () => {
             <label htmlFor="email">Email</label>
             <input
               id='email'
-              placeholder='Enter your Email'
+              placeholder='Email'
               className='py-1 text-base  placeholder:text-black text-slate-950 rounded-lg px-3 outline-none bg-slate-300 xl:text-xl'
               type="email"
               {...register("email", { required: "Email is required" })}
@@ -83,7 +94,7 @@ const SignUp = () => {
             <span className='flex items-center w-full'>
               <input
                 id='password'
-                placeholder='Enter your password'
+                placeholder='Password'
                 className='py-1 text-base  placeholder:text-black text-slate-950 w-full rounded-lg px-3 outline-none bg-slate-300 xl:text-xl'
                 type={hidePassword.password ? "password" : "text"}
                 {...register("password", { required: "Password is required" })}
@@ -107,7 +118,7 @@ const SignUp = () => {
               <input
                 name='confirmPassword'
                 id='confirmPassword'
-                placeholder='Re-enter your password'
+                placeholder='Confirm Password'
                 className='py-1 text-base  placeholder:text-black text-slate-950 w-full rounded-lg px-3 outline-none bg-slate-300 xl:text-xl'
                 type={hidePassword.confirmPassword ? "password" : "text"}
                 {...register("confirmPassword", { required: "Re-enter your password" })}
@@ -126,7 +137,7 @@ const SignUp = () => {
             }
           </span>
 
-           <span className='flex border border-slate-600 p-1 cursor-pointer w-max gap-3 rounded-full'>
+          <span className='flex border border-slate-600 p-1 cursor-pointer w-max gap-3 rounded-full'>
             <button
               type="button"
               className={`${role === "user" ? "bg-green-700" : "bg-transparent"} px-3 rounded-full`}
@@ -160,5 +171,6 @@ const SignUp = () => {
     </div >
   )
 }
+
 
 export default SignUp

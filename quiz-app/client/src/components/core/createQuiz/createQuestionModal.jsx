@@ -3,11 +3,6 @@ import { useForm } from 'react-hook-form';
 import Button from '../../Button';
 import { IoAdd, IoClose } from "react-icons/io5";
 import { apiConnector } from '../../../services/apiConnector';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Button from '../../Button';
-import { IoAdd, IoClose } from "react-icons/io5";
-import { apiConnector } from '../../../services/apiConnector';
 import { createQuestion } from '../../../services/operations/questionAPIs';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
@@ -65,9 +60,7 @@ const CreateQuestionModal = ({ quiz, setQuestions, setCreateQuestionModalData })
 
   return (
     <div className='absolute top-[50%] max-w-[480px] mx-auto translate-y-[-50%] flex justify-start p-5 gap-10 flex-col items-center bg-slate-800 shadow-lg shadow-slate-600 rounded-lg border border-slate-600 inset-0 h-max'>
-
       <h3 className='text-3xl'>Create a question</h3>
-
       <form onSubmit={handleSubmit(submitHandler)} className='w-full max-w-[480px] flex flex-col gap-5'>
 
         <span className='flex flex-col gap-3'>

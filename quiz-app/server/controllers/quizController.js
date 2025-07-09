@@ -184,15 +184,12 @@ exports.attemptQuiz = async (req, res) => {
     });
     await attempt.save();
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        $push: {
-          attemptedQuizes: quizId
-        },
-      },
-      { new: true }
-    );
+    const user = await User.findById(userId);
+
+    if(!user.attemptedQuizes.includes(quizId)) {
+      user.attemptedQuizes.push(quizId);
+      await user.save();
+    }
 
     return res.status(200).json({
       success: true,
@@ -208,10 +205,10 @@ exports.attemptQuiz = async (req, res) => {
   }
 };
 
-// ⚙️
+// ✅
 exports.getUserAttempts = async (req, res) => {
   try {
-    const userId = req.user._id; 
+    const userId = req.user.id; 
 
     const attempts = await Attempt.find({ userId }).populate(
       "quizId",
@@ -220,7 +217,7 @@ exports.getUserAttempts = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      attempts,
+      data: attempts,
     });
   } catch (e) {
     console.error("ERROR FETCHING USER ATTEMPTS:", e.message);

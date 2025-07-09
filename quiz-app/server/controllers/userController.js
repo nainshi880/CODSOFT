@@ -20,12 +20,20 @@ exports.register = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email });
+    const emailExists = await User.findOne({ email });
     
-    if (existingUser) {
+    if (emailExists) {
       return res
         .status(400)
-        .json({ success: false, error: "User already exists" });
+        .json({ success: false, error: "Email is already registered, Please log in" });
+    }
+
+    const usernameExists = await User.findOne({ username });
+
+    if (usernameExists) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Username already exists" });
     }
 
     const hashedPasssword = await bcrypt.hash(password, 10);

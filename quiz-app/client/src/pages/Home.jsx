@@ -21,8 +21,6 @@ const Home = () => {
         throw new Error(response.data.message)
       }
 
-      // console.log("res : ", response);
-
       setQuizzes(response.data.data);
 
     } catch (e) {
@@ -37,17 +35,19 @@ const Home = () => {
   }, [])
 
   return (
-    <section className='min-h-screen border-t border-slate-600 py-5 mt-3'>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3'>
-        {
-          loading
-            ? <div className='text-center min-h-[90vh] flex items-center justify-center text-xl'>Loading...</div>
-            : !loading && quizzes?.length > 0
-              ? quizzes.map((quiz, index) => (
-                <QuizCard key={quiz._id} quiz={quiz} index={index} />
-              )) : <p>No quizzes found</p>
-        }
-      </div>
+    <section className='min-h-[90vh] border-t border-slate-600 py-5 mt-3'>
+      {
+        loading ? <div className='text-center min-h-[90vh] flex items-center justify-center text-xl'>Loading...</div>
+          : !loading && quizzes?.length > 0
+            ? <div className='grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-3'>
+              {
+                quizzes.map((quiz, index) => (
+                  <QuizCard key={quiz._id} quiz={quiz} index={index} />
+                ))
+              }
+            </div>
+            : <p>No quizzes found</p>
+      }
     </section>
   )
 }

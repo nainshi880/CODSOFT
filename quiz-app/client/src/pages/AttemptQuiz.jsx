@@ -25,7 +25,7 @@ const AttemptQuiz = () => {
                 Authorization: `Bearer ${token}`
             })
 
-            console.log("QUIZ QUESTIONS RESPONSE : ", response)
+            // console.log("QUIZ QUESTIONS RESPONSE : ", response)
 
             setQuisQuestions(response?.data?.data);
         } catch (error) {
@@ -58,23 +58,23 @@ const AttemptQuiz = () => {
     }, [quizId]);
 
     return (
-        <section className=' min-h-screen py-10'>
-            <div className='border p-3 rounded-lg bg-slate-900 border-slate-600'>
+        <section className=' min-h-[90vh] py-10'>
+            <div className='border py-3 px-5 rounded-lg bg-slate-900 border-slate-600'>
                 {
                     questionsLoading || detailsLoading ? <h1>Loading...</h1> :
-                        <span>
-                            <span className='flex gap-3 items-center font-thin'>
-                                <h3 className='text-2xl font-semibold'>{quizDetails?.title}</h3>
-                                |
-                                <p>{quizDetails?.timer} minutes</p>
+                        <>
+                            <span className='flex flex-col md:flex-row gap-x-5 gap-y-1 items-center justify-between font-thin mb-3'>
+                                <h3 className='text-base md:text-2xl font-semibold line-clamp-2'>{quizDetails?.title}</h3>
+                                <p className='text-slate-300 w-fit text-nowrap'>Time : {quizDetails?.timer} minutes</p>
                             </span>
-                            <p className='font-thin mt-1'>{quizDetails?.description}</p>
-                            <span className='flex gap-3 font-thin'>
-                                <p>crated By - {quizDetails?.createdBy?.username}</p>
-                                |
-                                <p>{formatDistanceToNow(new Date(quizDetails.createdAt), { addSuffix: true })}</p>
+                            <span className='flex flex-col md:flex-row justify-between items-center gap-x-5 gap-y-1 font-thin'>
+                                <p className='font-thin mt-1 line-clamp-2'>{quizDetails?.description} </p>
+                                <span className='flex gap-3 text-slate-300 w-fit text-nowrap'>
+                                    <p>crated By - {quizDetails?.createdBy?.username}</p>
+                                    <p>{formatDistanceToNow(new Date(quizDetails.createdAt), { addSuffix: true })}</p>
+                                </span>
                             </span>
-                        </span>
+                        </>
                 }
             </div>
             <div>
