@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { apiConnector } from '../services/apiConnector';
 import { questionEndpoints } from '../services/APIs';
 import Button from '../components/Button';
-import CreateQuestionModal from '../components/core/createQuiz/CreateQuestionModal';
+import CreateQuestionModal from '../components/core/createQuiz/createQuestionModal';
 import QuestionCard from "../components/core/createQuiz/QuestionCard"
 import { deleteQuestion } from '../services/operations/questionAPIs';
 import { setQuiz, setEdit } from '../slices/QuizSlice';
